@@ -323,7 +323,6 @@ body {
       gap: 20px;
       position: absolute;
       right: 50px; /* зафиксировать его справа */
-      top: 15px;
     }
 
     nav a {
@@ -401,4 +400,5 @@ body {
         right: 50px; /* зафиксировать его справа */
         top: 15px;
       }
+
     }
