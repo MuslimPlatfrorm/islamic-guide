@@ -7,17 +7,17 @@ const PAGES = {
             <div class="card">
               <div class="pill">Раздел 1</div>
               <h3>Характеристики букв</h3>
-              <p class="muted">Короткое описание того, что ожидает внутри раздела.</p>
+              <p class="muted">Раздел с характеристиками и атрибутами арабских букв.</p>
             </div>
             <div class="card">
               <div class="pill">Раздел 2</div>
               <h3>Сифатуль хуруф</h3>
-              <p class="muted">Основные понятия и ключевые определения.</p>
+              <p class="muted">Характеристики букв, определяющие их силу, мягкость и особенности произношения.</p>
             </div>
             <div class="card">
               <div class="pill">Раздел 3</div>
               <h3>Суджуд ас сахф</h3>
-              <p class="muted">Краткая справка и пошаговые случаи применения.</p>
+              <p class="muted">Дополнительные поклоны в намазе для исправления ошибок или забывчивости.</p>
             </div>
             <div class="card">
               <div class="pill">Раздел 4</div>
@@ -108,3 +108,4 @@ const PAGES = {
     // Год в подвале
 
     document.getElementById('y').textContent = new Date().getFullYear();
+
