@@ -1,7 +1,7 @@
 const PAGES = {
       menu: {
         title: 'Главное меню',
-        desc: 'Выберите один из пяти пунктов. Пока вы на главной, слово «Меню» в боковой панели подсвечено.',
+        desc: 'Выберите один из четырех пунктов. Пока вы на главной, слово «Меню» в боковой панели подсвечено.',
         html: `
           <div class="grid grid-2">
             <div class="card">
@@ -106,4 +106,5 @@ const PAGES = {
     render(getRouteFromHash());
 
     // Год в подвале
+
     document.getElementById('y').textContent = new Date().getFullYear();
