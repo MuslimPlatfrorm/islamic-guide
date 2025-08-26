@@ -1,7 +1,7 @@
 const PAGES = {
   menu: {
     title: 'Главное меню',
-    desc: 'Выберите один из пяти пунктов. Пока вы на главной, слово «Меню» в боковой панели подсвечено.',
+    desc: 'Выберите один из трех пунктов.',
     html: `
           <div class="grid grid-2">
             <div class="card">
@@ -128,6 +128,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
+
 
 
 
