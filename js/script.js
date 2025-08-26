@@ -4,7 +4,6 @@ const PAGES = {
     desc: 'Выберите один из пяти пунктов. Пока вы на главной, слово «Меню» в боковой панели подсвечено.',
     html: `
           <div class="grid grid-2">
-            
             <div class="card">
               <div class="pill">Раздел 2</div>
               <h3>Сифатуль хуруф</h3>
@@ -129,6 +128,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
+
 
 
 
