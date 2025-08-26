@@ -1,18 +1,18 @@
 const PAGES = {
   menu: {
     title: 'Главное меню',
-    desc: 'Выберите один из трех пунктов.',
+    desc: 'Выберите один из трех пунктов разделе.',
     html: `
           <div class="grid grid-2">
             <div class="card">
               <div class="pill">Раздел 2</div>
               <h3>Сифатуль хуруф</h3>
-              <p class="muted">Основные понятия и ключевые определения.</p>
+              <p class="muted">Описание терминов, классификации и практических примеров.</p>
             </div>
             <div class="card">
               <div class="pill">Раздел 3</div>
               <h3>Суджуд ас сахф</h3>
-              <p class="muted">Краткая справка и пошаговые случаи применения.</p>
+              <p class="muted">Сценарии, условия, ссылки на источники и примеры.</p>
             </div>
             <div class="card">
               <div class="pill">Раздел 4</div>
@@ -128,6 +128,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
+
 
 
 
