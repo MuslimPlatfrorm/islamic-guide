@@ -1,38 +1,244 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Главная страница = Меню</title>
-  <link rel="stylesheet" href="css/style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+<title>Muslim Platform — изучение арабского языка и наук о Коране</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Playfair+Display:wght@600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<style>
+  /* ─────────── Токены ─────────── */
+  :root{
+    --accent:#10b981;        /* изумруд — используется дозированно */
+    --accent-d:#0a7d57;      /* тёмный изумруд (текст на светлом) */
+    --accent-l:#6ee7b7;      /* светлый изумруд */
+    --accent-glow:rgba(16,185,129,.12);
 
+    --bg:#faf7f1;            /* мягкий тёплый светлый */
+    --surface:#ffffff;       /* шапка/карточки */
+    --fill:#f2efe8;          /* лёгкая заливка */
+    --border:#e6e1d6;        /* тонкая линия */
+
+    --text:#1b1a17;
+    --text2:#4a4742;
+    --text3:#857f76;
+
+    --shadow:0 1px 2px rgba(20,18,14,.04), 0 6px 22px rgba(20,18,14,.05);
+    --shadow-lg:0 10px 36px rgba(20,18,14,.10);
+  }
+  /* Тёмная тема: почти чёрная, нейтральная, линии еле заметны, но различимы */
+  html.dark{
+    --accent:#34d399;
+    --accent-d:#34d399;
+    --accent-l:#34d399;
+    --accent-glow:rgba(52,211,153,.10);
+
+    --bg:#0b0b0c;           /* почти чёрный */
+    --surface:#141416;       /* поверхность чуть приподнята */
+    --fill:#19191c;
+    --border:#262629;        /* тёмная, тонкая, но заметная линия */
+
+    --text:#eae8e3;          /* мягкий не-белый */
+    --text2:#b6b4ae;
+    --text3:#7c7a74;
+
+    --shadow:0 1px 2px rgba(0,0,0,.5), 0 8px 26px rgba(0,0,0,.45);
+    --shadow-lg:0 14px 40px rgba(0,0,0,.6);
+  }
+
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%;-webkit-tap-highlight-color:transparent}
+  /* убираем синюю подсветку при тапе на ссылки/кнопки (стандартное поведение мобильных браузеров) */
+  a,button{-webkit-tap-highlight-color:transparent}
+  ::selection{background:rgba(16,185,129,.18)}
+  html.dark ::selection{background:rgba(52,211,153,.22)}
+  body{
+    font-family:'Source Serif 4',Georgia,serif;
+    background:var(--bg);color:var(--text);line-height:1.65;
+    min-height:100vh;display:flex;flex-direction:column;
+    transition:background .3s,color .3s;
+  }
+  ::-webkit-scrollbar{width:7px}
+  ::-webkit-scrollbar-track{background:var(--fill)}
+  ::-webkit-scrollbar-thumb{background:var(--border);border-radius:99px}
+  html.dark ::-webkit-scrollbar-thumb{background:#2f2f33}
+  .ar{font-family:'Amiri',serif;direction:rtl}
+
+  /* ─────────── Переключатель темы (маленький, в углу) ─────────── */
+  .theme-fab{
+    position:fixed;top:.85rem;right:.85rem;z-index:50;
+    width:38px;height:38px;border-radius:10px;cursor:pointer;
+    border:1px solid var(--border);background:var(--surface);color:var(--text2);
+    display:flex;align-items:center;justify-content:center;font-size:1rem;
+    box-shadow:var(--shadow);
+    transition:transform .15s ease,border-color .2s,background .3s,color .3s;
+  }
+  .theme-fab:hover{transform:scale(1.07);border-color:var(--accent);color:var(--text)}
+  .theme-fab:active{transform:scale(.96);transition-duration:.08s}
+  .theme-fab:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+  /* ─────────── Шапка (полная ширина) ─────────── */
+  .head{
+    position:relative;overflow:hidden;text-align:center;
+    background:var(--surface);border-bottom:1px solid var(--border);
+    padding:2.6rem 1.25rem 2.2rem;
+    transition:background .3s,border-color .3s;
+  }
+  .head::before{
+    content:'بِسْمِ ٱللَّٰهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ';
+    font-family:'Amiri',serif;direction:rtl;white-space:nowrap;
+    position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+    font-size:clamp(2rem,8vw,4.2rem);color:var(--accent);opacity:.06;
+    pointer-events:none;letter-spacing:.04em;
+  }
+  .head-in{position:relative;z-index:1}
+  .head h1{
+    font-family:'Playfair Display',serif;font-weight:700;letter-spacing:.01em;
+    font-size:clamp(1.9rem,6vw,2.7rem);line-height:1.1;color:var(--text);
+  }
+  .head .sub{color:var(--text3);font-style:italic;margin-top:.55rem;font-size:clamp(.92rem,3.2vw,1.02rem)}
+  .head .rule{
+    width:96px;height:2px;margin:1.2rem auto 0;border:none;border-radius:2px;
+    background:linear-gradient(to right,transparent,var(--accent-l),transparent);
+    opacity:.8;
+  }
+
+  /* ─────────── Разделы ─────────── */
+  main{flex:1;width:100%;max-width:880px;margin:0 auto;padding:2rem 1.1rem 2.6rem}
+  .label{
+    font-size:.72rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--text3);margin:0 .25rem 1rem;
+  }
+  .grid{display:grid;grid-template-columns:1fr;gap:.85rem}
+  @media(min-width:620px){.grid{grid-template-columns:1fr 1fr;gap:1rem}}
+
+  .card{
+    position:relative;display:flex;flex-direction:column;
+    background:var(--surface);border:1px solid var(--border);border-radius:14px;
+    padding:1.3rem 1.3rem 1.2rem;text-decoration:none;color:inherit;overflow:hidden;
+    box-shadow:var(--shadow);
+    transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease;
+    opacity:0;transform:translateY(12px);animation:rise .45s ease forwards;
+  }
+  .card:nth-child(2){animation-delay:.05s}
+  .card:nth-child(3){animation-delay:.10s}
+  .card:nth-child(4){animation-delay:.15s}
+  @keyframes rise{to{opacity:1;transform:translateY(0)}}
+
+  .card::before{ /* тонкая изумрудная грань слева — только на hover */
+    content:'';position:absolute;left:0;top:0;bottom:0;width:3px;
+    background:var(--accent);opacity:0;transition:opacity .2s ease;
+  }
+  .card:hover,.card:focus-visible{
+    transform:translateY(-3px);box-shadow:var(--shadow-lg);
+    border-color:var(--accent);outline:none;
+  }
+  .card:hover::before,.card:focus-visible::before{opacity:.9}
+  .card:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+  /* мягкая отдача при нажатии (в стиле темы, без синей заливки) */
+  .card:active{transform:translateY(-1px) scale(.992);background:var(--fill);border-color:var(--accent);transition-duration:.08s}
+  .card:active::before{opacity:.9}
+
+  .card-ar{
+    font-family:'Amiri',serif;direction:rtl;color:var(--accent-d);
+    font-size:1.4rem;font-weight:700;line-height:1.5;margin-bottom:.4rem;
+  }
+  .card-title{
+    font-family:'Playfair Display',serif;font-weight:700;
+    font-size:1.18rem;color:var(--text);margin-bottom:.4rem;
+  }
+  .card-desc{color:var(--text2);font-size:.92rem;line-height:1.55}
+  .card-go{
+    margin-top:1rem;display:inline-flex;align-items:center;gap:.35rem;
+    font-size:.82rem;font-weight:600;color:var(--accent-d);
+  }
+  .card-go .arrow{transition:transform .2s ease}
+  .card:hover .card-go .arrow{transform:translateX(3px)}
+
+  /* ─────────── Подвал ─────────── */
+  footer{
+    border-top:1px solid var(--border);text-align:center;
+    padding:1.6rem 1.1rem 2rem;color:var(--text3);
+    transition:border-color .3s;
+  }
+  .dua{font-family:'Amiri',serif;direction:rtl;color:var(--accent-d);font-size:1.2rem;font-weight:700;margin-bottom:.4rem}
+  .dua-tr{font-style:italic;font-size:.86rem;margin-bottom:.8rem}
+  .meta{font-size:.8rem}
+
+  @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
 </head>
 <body>
-  <header>
-    <h1>Главная страница</h1>
-    <p>Выберите раздел котрую хотите посетить</p>
+  <button class="theme-fab" id="theme" aria-label="Переключить тему">🌙</button>
+
+  <header class="head">
+    <div class="head-in">
+      <h1>Muslim Platform</h1>
+      <p class="sub">Выберите раздел, который хотите изучить</p>
+      <hr class="rule">
+    </div>
   </header>
 
-  <div class="container">
-    <nav aria-label="Главное меню">
-      <div class="menu-title">Разделы</div>
-      <ul class="menu">
-        <li><a href="#menu" data-route="menu" id="link-menu">Меню <span class="badge">главная</span></a></li>
-        <li><a href="pages/Sifatul Huruf/Sifat-ul-Huruf.html" data-route="sifatul-huruf">Сифатуль хуруф</a></li>
-        <li><a href="pages/sudjud as-sahf/sudjud as-sahf.html" data-route="sujud-as-sahf">Суджуд ас сахф</a></li>
-        <li><a href="pages/Tadjwid/tadjwid.html" data-route="tadzhvid">Таджвид</a></li>
-      </ul>
-    </nav>
+  <main>
+    <div class="label">Разделы</div>
+    <div class="grid">
 
-    <main id="content" tabindex="-1" aria-live="polite" aria-busy="false">
-      <!-- Секция по умолчанию подставится скриптом -->
-    </main>
-  </div>
+      <a class="card" href="https://muslimplatfrorm.github.io/ArabicGrammar/">
+        <div class="card-ar">النَّحْو والصَّرْف</div>
+        <div class="card-title">Арабская грамматика</div>
+        <p class="card-desc">Основы наху и сарфа: разбор слов, и‘раб и построение предложений.</p>
+        <span class="card-go">Открыть <span class="arrow">→</span></span>
+      </a>
+
+      <a class="card" href="https://muslimplatfrorm.github.io/Tadjvid/">
+        <div class="card-ar">التَّجْوِيد</div>
+        <div class="card-title">Таджвид</div>
+        <p class="card-desc">Правила чтения Корана: махрадж букв, правила нуна и мима, мадд.</p>
+        <span class="card-go">Открыть <span class="arrow">→</span></span>
+      </a>
+
+      <a class="card" href="https://muslimplatfrorm.github.io/Sifatul-Huruf/">
+        <div class="card-ar">صِفَات الحُرُوف</div>
+        <div class="card-title">Сифатуль хуруф</div>
+        <p class="card-desc">Характеристики букв с разными харакатами: хамс, джахр, шидда и другие.</p>
+        <span class="card-go">Открыть <span class="arrow">→</span></span>
+      </a>
+
+      <a class="card" href="https://muslimplatfrorm.github.io/islamic-guide/pages/sudjud%20as-sahf/sudjud%20as-sahf.html">
+        <div class="card-ar">سُجُود السَّهْو</div>
+        <div class="card-title">Суджуд ас-сахв</div>
+        <p class="card-desc">Земной поклон невнимательности: когда и как он совершается в намазе.</p>
+        <span class="card-go">Открыть <span class="arrow">→</span></span>
+      </a>
+
+    </div>
+  </main>
 
   <footer>
-    © <span id="y"></span> • Одностраничный сайт-меню
+    <div class="dua ar">وَقُل رَّبِّ زِدْنِي عِلْمًا</div>
+    <div class="dua-tr">«Господь мой, приумножь мои знания»</div>
+    <div class="meta">© <span id="y"></span> · Muslim Platform</div>
   </footer>
 
-  <script src="js/script.js"></script>
+  <script>
+    document.getElementById('y').textContent = new Date().getFullYear();
+
+    const root = document.documentElement;
+    const btn = document.getElementById('theme');
+    function apply(dark){
+      root.classList.toggle('dark', dark);
+      btn.textContent = dark ? '☀️' : '🌙';
+      btn.setAttribute('aria-label', dark ? 'Светлая тема' : 'Тёмная тема');
+    }
+    let saved = null;
+    try{ saved = localStorage.getItem('mp-theme'); }catch(e){}
+    apply(saved ? saved === 'dark' : window.matchMedia('(prefers-color-scheme:dark)').matches);
+    btn.addEventListener('click', () => {
+      const dark = !root.classList.contains('dark');
+      apply(dark);
+      try{ localStorage.setItem('mp-theme', dark ? 'dark' : 'light'); }catch(e){}
+    });
+  </script>
 </body>
 </html>
