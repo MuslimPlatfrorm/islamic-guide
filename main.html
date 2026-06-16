@@ -111,7 +111,11 @@
     color:var(--text3);margin:0 .25rem 1rem;
   }
   .grid{display:grid;grid-template-columns:1fr;gap:.85rem}
-  @media(min-width:620px){.grid{grid-template-columns:1fr 1fr;gap:1rem}}
+  @media(min-width:620px){
+    .grid{grid-template-columns:1fr 1fr;gap:1rem}
+    /* если последняя карточка осталась одна в ряду (нечётное число) — центрируем её */
+    .grid>.card:last-child:nth-child(odd){grid-column:1 / -1;justify-self:center;width:calc(50% - .5rem)}
+  }
 
   .card{
     position:relative;display:flex;flex-direction:column;
@@ -124,6 +128,8 @@
   .card:nth-child(2){animation-delay:.05s}
   .card:nth-child(3){animation-delay:.10s}
   .card:nth-child(4){animation-delay:.15s}
+  .card:nth-child(5){animation-delay:.20s}
+  .card:nth-child(6){animation-delay:.25s}
   @keyframes rise{to{opacity:1;transform:translateY(0)}}
 
   .card::before{ /* тонкая изумрудная грань слева — только на hover */
@@ -191,17 +197,31 @@
         <span class="card-go">Открыть <span class="arrow">→</span></span>
       </a>
 
-      <a class="card" href="https://muslimplatfrorm.github.io/Tadjvid/">
+      <a class="card" href="https://muslimplatfrorm.github.io/islamic-guide/pages/Tadjwid/tadjwid.html">
         <div class="card-ar">التَّجْوِيد</div>
         <div class="card-title">Таджвид</div>
         <p class="card-desc">Правила чтения Корана: махрадж букв, правила нуна и мима, мадд.</p>
         <span class="card-go">Открыть <span class="arrow">→</span></span>
       </a>
 
-      <a class="card" href="https://muslimplatfrorm.github.io/Sifatul-Huruf/">
+      <a class="card" href="https://muslimplatfrorm.github.io/islamic-guide/pages/letters/letters.html">
+        <div class="card-ar">صِفَاتُ الحُرُوف</div>
+        <div class="card-title">Характеристики букв</div>
+        <p class="card-desc">Теория сыфатов: какие неотъемлемые качества есть у букв и как они делятся на группы.</p>
+        <span class="card-go">Открыть <span class="arrow">→</span></span>
+      </a>
+
+      <a class="card" href="https://muslimplatfrorm.github.io/islamic-guide/pages/Sifatul%20Huruf/Sifat-ul-Huruf.html">
         <div class="card-ar">صِفَات الحُرُوف</div>
         <div class="card-title">Сифатуль хуруф</div>
-        <p class="card-desc">Характеристики букв с разными харакатами: хамс, джахр, шидда и другие.</p>
+        <p class="card-desc">Интерактивная таблица: хамс, джахр, шидда и др. для каждой буквы с харакатами.</p>
+        <span class="card-go">Открыть <span class="arrow">→</span></span>
+      </a>
+
+      <a class="card" href="https://muslimplatfrorm.github.io/Namaz/namaz.html">
+        <div class="card-ar">الصَّلَاة</div>
+        <div class="card-title">Намаз</div>
+        <p class="card-desc">Пошаговая анимация намаза: положения тела и правильный порядок молитвы.</p>
         <span class="card-go">Открыть <span class="arrow">→</span></span>
       </a>
 
