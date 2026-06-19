@@ -1,28 +1,233 @@
-
 <!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="light dark">
     <title>Введение в Таджвид (التَّجْوِيدُ)</title>
-    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* ===== Design tokens ===== */
+        :root{
+            --base: 17px;          /* базовый размер текста контента */
+            --scale: 1;            /* множитель масштаба (кнопки +/-) */
+
+            --bg: #f5f7f8;
+            --surface: #ffffff;
+            --surface-2: #eef4f1;
+            --border: #e3e8e6;
+            --text: #1f2a26;
+            --text-soft: #5d6b64;
+            --text-strong: #0e1a15;
+            --heading: #102019;
+            --accent: #128a6a;
+            --accent-strong: #0c6c53;
+            --accent-weak: rgba(18,138,106,.12);
+            --ar: #0b6b50;
+
+            --shadow-sm: 0 1px 2px rgba(16,40,30,.05);
+            --shadow-card: 0 1px 2px rgba(16,40,30,.06), 0 10px 26px rgba(16,40,30,.05);
+
+            --tb-bg: rgba(255,255,255,.82);
+            --tb-border: rgba(20,40,33,.12);
+            --tb-fg: #2a3a33;
+            --tb-hover: rgba(18,138,106,.13);
+            --tb-shadow: 0 6px 24px rgba(16,40,30,.16), 0 1px 3px rgba(16,40,30,.10);
+            --tb-shadow-drag: 0 14px 38px rgba(16,40,30,.26);
+        }
+        html[data-theme="dark"]{
+            --bg: #0e1512;
+            --surface: #151d1a;
+            --surface-2: #1b2521;
+            --border: #27332e;
+            --text: #dde6e1;
+            --text-soft: #9eb0a8;
+            --text-strong: #f1f7f4;
+            --heading: #eafff7;
+            --accent: #34d3a6;
+            --accent-strong: #59e0bb;
+            --accent-weak: rgba(52,211,166,.14);
+            --ar: #7fe8c7;
+
+            --shadow-sm: 0 1px 2px rgba(0,0,0,.4);
+            --shadow-card: 0 1px 2px rgba(0,0,0,.4), 0 10px 26px rgba(0,0,0,.35);
+
+            --tb-bg: rgba(24,32,29,.82);
+            --tb-border: rgba(255,255,255,.10);
+            --tb-fg: #cfe0d8;
+            --tb-hover: rgba(52,211,166,.16);
+            --tb-shadow: 0 6px 24px rgba(0,0,0,.5), 0 1px 3px rgba(0,0,0,.4);
+            --tb-shadow-drag: 0 14px 38px rgba(0,0,0,.6);
+        }
+
+        /* ===== Base ===== */
+        *{ box-sizing: border-box; }
+        html{ -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+        body{
+            margin: 0;
+            background: var(--bg);
+            color: var(--text);
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial,
+                         "Amiri", "Scheherazade New", "Scheherazade", "Traditional Arabic",
+                         "Arabic Typesetting", "Geeza Pro", "Noto Naskh Arabic", "Noto Sans Arabic", sans-serif;
+            -webkit-font-smoothing: antialiased;
+            text-rendering: optimizeLegibility;
+        }
+        ::selection{ background: var(--accent-weak); }
+        .wrap{ max-width: 820px; margin-inline: auto; padding-inline: 22px; }
+        .ar, .arabic{ color: var(--ar); font-weight: 600; }
+
+        /* ===== Scroll progress ===== */
+        .scroll-progress{
+            position: fixed; inset: 0 auto auto 0; height: 3px; width: 0;
+            background: linear-gradient(90deg, var(--accent), var(--accent-strong));
+            z-index: 60; transition: width .1s linear;
+        }
+
+        /* ===== Header ===== */
+        .page-header{
+            padding: 42px 0 26px;
+            background: linear-gradient(180deg, var(--accent-weak), transparent 88%);
+            border-bottom: 1px solid var(--border);
+        }
+        .eyebrow{
+            margin: 0 0 .55em; color: var(--accent-strong);
+            font-size: .78rem; font-weight: 600; letter-spacing: .09em; text-transform: uppercase;
+        }
+        .page-title{
+            margin: 0 0 .35em; color: var(--heading); font-weight: 700;
+            font-size: clamp(1.85rem, 5vw, 2.6rem); line-height: 1.14; letter-spacing: -.02em;
+        }
+        .page-title .ar{ color: var(--accent-strong); }
+        .page-sub{ margin: 0; color: var(--text-soft); font-size: 1rem; }
+
+        /* ===== Content ===== */
+        .content{
+            font-size: calc(var(--base) * var(--scale));
+            line-height: 1.75;
+            padding-top: 26px;
+            padding-bottom: 8px;
+        }
+        /* Вводные абзацы (прямые потомки main) — лид-блок */
+        .content > p{
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-left: 3px solid var(--accent);
+            border-radius: 14px;
+            padding: 16px 20px;
+            margin: 0 0 18px;
+            box-shadow: var(--shadow-sm);
+        }
+        /* Разделы — карточки */
+        .section{
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 24px 26px;
+            margin: 0 0 22px;
+            box-shadow: var(--shadow-card);
+        }
+        .section > h2{
+            position: relative;
+            margin: 0 0 1em;
+            padding-bottom: .6em;
+            border-bottom: 1px solid var(--border);
+            color: var(--heading);
+            font-size: 1.34em; line-height: 1.3; font-weight: 700; letter-spacing: -.01em;
+        }
+        .section > h2::after{
+            content: ""; position: absolute; left: 0; bottom: -1px;
+            width: 54px; height: 3px; border-radius: 3px; background: var(--accent);
+        }
+
+        .content p{ margin: 0 0 1em; }
+        .content p:last-child{ margin-bottom: 0; }
+
+        .content ul,
+        .content ol{ margin: .45em 0 .85em; padding-left: 1.45em; }
+        .content li{ margin: .32em 0; }
+        .content li::marker{ color: var(--accent); }
+        .content ul{ list-style: disc; }
+        .content ul ul{ list-style: circle; }
+        .content ul ul ul{ list-style: square; }
+        .content ul ul,
+        .content ol ol,
+        .content ul ol,
+        .content ol ul{ margin: .3em 0 .55em; }
+
+        .content strong{ color: var(--text-strong); font-weight: 600; }
+
+        /* ===== Footer ===== */
+        .page-footer{
+            color: var(--text-soft); font-size: .85rem; text-align: center;
+            padding: 18px 22px 64px; max-width: 820px; margin-inline: auto;
+        }
+        .page-footer hr{ border: none; border-top: 1px solid var(--border); margin: 0 0 16px; }
+
+        /* ===== Floating toolbar ===== */
+        .toolbar{
+            position: fixed; right: 18px; bottom: 18px; z-index: 50;
+            display: flex; align-items: center; gap: 1px;
+            padding: 6px;
+            border-radius: 999px;
+            background: var(--tb-bg);
+            border: 1px solid var(--tb-border);
+            box-shadow: var(--tb-shadow);
+            -webkit-backdrop-filter: blur(12px) saturate(1.3);
+            backdrop-filter: blur(12px) saturate(1.3);
+            opacity: .6;                  /* полупрозрачная в покое (меньше прозрачности) */
+            transition: opacity .35s ease, box-shadow .25s ease, transform .15s ease;
+            touch-action: none; user-select: none; -webkit-user-select: none;
+            cursor: grab;                 /* перетаскивается за любую точку панели */
+        }
+        .toolbar:hover,
+        .toolbar.is-active,
+        .toolbar.is-dragging{ opacity: 1; }   /* непрозрачная при касании/наведении */
+        .toolbar.is-dragging{ box-shadow: var(--tb-shadow-drag); transform: scale(1.02); cursor: grabbing; }
+        .toolbar.is-dragging .tb-btn{ cursor: grabbing; }
+
+        .tb-sep{ width: 1px; height: 22px; background: var(--tb-border); margin: 0 3px; }
+
+        .tb-btn{
+            width: 38px; height: 38px; padding: 0;
+            display: inline-flex; align-items: center; justify-content: center;
+            border: none; background: transparent; color: var(--tb-fg);
+            border-radius: 50%; cursor: pointer;
+            transition: background .2s ease, transform .12s ease;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .tb-btn:hover{ background: var(--tb-hover); }
+        .tb-btn:active{ transform: scale(.88); }
+        .tb-btn svg{ width: 20px; height: 20px; display: block; }
+
+        /* Reset — «кружащаяся стрелка»: один оборот по часовой при клике */
+        .tb-btn--reset.spin svg{ animation: tb-spin .6s cubic-bezier(.4,0,.2,1); }
+        @keyframes tb-spin{ from{ transform: rotate(0deg); } to{ transform: rotate(360deg); } }
+
+        /* ===== Responsive ===== */
+        @media (max-width: 560px){
+            .wrap{ padding-inline: 15px; }
+            .section{ padding: 18px 16px; border-radius: 14px; }
+            .content > p{ padding: 14px 16px; }
+            .page-header{ padding: 32px 0 22px; }
+            .toolbar{ right: 12px; bottom: 12px; }
+        }
+        @media (prefers-reduced-motion: reduce){
+            *{ transition: none !important; animation: none !important; scroll-behavior: auto !important; }
+        }
+    </style>
 </head>
 <body>
-    <header>
-  <div class="logo">Меню-сайт</div>
-  <nav id="nav">
-    <a href="../../main.html">Меню</a>
-    <a href="../letters/letters.html">Характеристики букв</a>
-    <a href="../Sifatul Huruf/Sifat-ul-Huruf.html">Сифатуль хуруф</a>
-    <a href="../sudjud as-sahf/sudjud as-sahf.html">Суджуд ас сахф</a>
-    <a href="#">Таджвид</a>
-  </nav>
-  <div class="burger" id="burger">
-    <span></span><span></span><span></span>
+<div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
+
+<header class="page-header">
+  <div class="wrap">
+    <p class="eyebrow">Наука о правильном чтении Священного Корана</p>
+    <h1 class="page-title">Введение в Таджвид <bdi class="ar">التَّجْوِيدُ</bdi></h1>
+    <p class="page-sub">Риваят Хафса ан 'Асыма · <bdi class="ar">رِوَايَةُ حَفْصٍ عَنْ عَاصِمٍ</bdi></p>
   </div>
 </header>
-<main>
-    <h1>Введение в Таджвид (التَّجْوِيدُ)</h1>
+
+<main class="content wrap" id="content">
 
 <p>التَّجْوِيدُ (ат-таджвид) в языковом значении означает "улучшение", "доведение до совершенства". В терминологии шариата и чтецов Корана – это наука о правильном чтении Священного Корана, которое подразумевает произнесение каждой буквы в соответствии с её местом образования (مَخْرَجٌ) и свойственными ей характеристиками (صِفَاتٌ), а также соблюдение всех необходимых правил, таких как удлинения (مُدُودٌ), ассимиляция (إِدْغَامٌ), назализация (غُنَّةٌ) и другие.</p>
 
@@ -60,8 +265,7 @@
                 <ul>
                     <li>غَيْنٌ (غ)</li>
                     <li>خَاءٌ (خ)</li>
-
-</ul>
+                </ul>
             </ul>
         </li>
         <li>
@@ -121,8 +325,7 @@
                 <li>بَيْنَ الشَّفَتَيْنِ (Байна-ш-Шафатайн) – Между двумя губами:</li>
                 <ul>
                     <li>وَاوٌ (و) (немаддовая): Округлением губ без их полного смыкания, например, وَلَدٌ.</li>
-
-<li>مِيمٌ (م): Смыканием губ.</li>
+                    <li>مِيمٌ (م): Смыканием губ.</li>
                     <li>بَاءٌ (ب): Более плотным смыканием губ, чем для مِيمٌ, и последующим их размыканием.</li>
                 </ul>
             </ul>
@@ -170,8 +373,7 @@
                         </li>
                         <li>
                             <strong>الْإِطْبَاقُ (Аль-Итбак) – Смыкание/Покрытие vs. الْاِنْفِتَاحُ (Аль-Инфитах) – Раскрытие/Разделение:</strong>
-
-<ul>
+                            <ul>
                                 <li>Буквы الْإِطْبَاقُ (ص, ض, ط, ظ): язык "покрывает" или прилегает к нёбу, делая их самыми твёрдыми буквами. Они являются подмножеством букв الْاِسْتِعْلَاءُ.</li>
                                 <li>Буквы الْاِنْفِتَاحُ (ء, ب, ت, ث, ج, ح, خ, د, ذ, ر, ز, س, ش, ع, غ, ف, ق, ل, م, ن, ه, و, ي
 ): между языком и нёбом есть просвет.</li>
@@ -202,8 +404,7 @@
                         <li>اللِّينُ (Аль-Лин) – Мягкость/Легкость: Для الْوَاوُ السَّاكِنَةُ (وْ) и الْيَاءُ السَّاكِنَةُ (يْ) (с сукуном), когда им предшествует фатха (فَتْحَةٌ) (например, خَوْفٌ, بَيْتٌ). Они произносятся мягко и без удлинения, если только на них не делается остановка (в этом случае применяется الْمَدُّ اللِّينُ - Мадд Лин).</li>
                         <li>الْاِنْحِرَافُ (Аль-Инхираф) – Отклонение/Смещение: Для букв لَامٌ (ل) и رَاءٌ (ر). Звук немного отклоняется от своего места образования. Для لَامٌ он смещается к месту образования نُونٌ. Для رَاءٌ он смещается к месту образования لَامٌ.</li>
                         <li>التَّكْرِيرُ (Ат-Такрир) – Повторение/Дрожание: Специфично для رَاءٌ (ر). Относится к легкому естественному дрожанию языка при произнесении رَاءٌ. Этой характеристики следует избегать в избытке (т.е. не преувеличенное дрожание), но она признается частью её природы. Нужно быть осторожным, чтобы не сделать его продолжительным дрожанием или полностью подавить, что сделает его похожим на لَامٌ.</li>
-
-<li>التَّفَشِّي (Ат-Тафашши) – Распространение воздуха: Специфично для شِينٌ (ش). Звук и воздух распространяются во рту.</li>
+                        <li>التَّفَشِّي (Ат-Тафашши) – Распространение воздуха: Специфично для شِينٌ (ش). Звук и воздух распространяются во рту.</li>
                         <li>الْاِسْتِطَالَةُ (Аль-Иститаля) – Удлинение (места образования): Специфично для ضَادٌ (ض). Звук простирается вдоль боковой(ых) части(ей) языка.</li>
                     </ul>
                 </li>
@@ -243,8 +444,7 @@
                 <li>إِدْغَامٌ بِغُنَّةٍ (Идгам би Гунна) – Слияние с назализацией: С четырьмя буквами "يَنْمُو" (ي, ن, م, و). Звук Нун сливается, и применяется الْغُنَّةُ длительностью в 2 счета (хараката).</li>
                 <ul>
                     <li>Пример: مَنْ يَقُولُ (произносится как مَيَّقُولُ), مِنْ مَالٍ (произносится как مِمَّالٍ).</li>
-
-<li>Исключение: Если النُّونُ السَّاكِنَةُ и буква Идгама находятся в одном слове (это называется الْإِظْهَارُ الْمُطْلَقُ - Аль-Изхар аль-Мутлак), то Идгам не происходит. В риваяте Хафса это встречается только в четырех словах в Коране: الدُّنْيَا, قِنْوَانٌ, صِنْوَانٌ, بُنْيَانٌ.</li>
+                    <li>Исключение: Если النُّونُ السَّاكِنَةُ и буква Идгама находятся в одном слове (это называется الْإِظْهَارُ الْمُطْلَقُ - Аль-Изхар аль-Мутлак), то Идгам не происходит. В риваяте Хафса это встречается только в четырех словах в Коране: الدُّنْيَا, قِنْوَانٌ, صِنْوَانٌ, بُنْيَانٌ.</li>
                 </ul>
                 <li>إِدْغَامٌ بِلَا غُنَّةٍ (Идгам биля Гунна) – Слияние без назализации (полный Идгам): С двумя буквами لَامٌ (ل) и رَاءٌ (ر). Звук Нун полностью сливается с لَامٌ или رَاءٌ без какой-либо الْغُنَّةُ.</li>
                 <ul>
@@ -343,8 +543,7 @@
                                 <ul>
                                     <li>Назначение الْمَدُّ الْفَرْقُ: Отличить вопросительное предложение (اِسْتِفْهَامٌ) от повествовательного (خَبَرٌ).</li>
                                     <li>Образование: Вопросительная хамза (هَمْزَةُ الْاِسْتِفْهَامِ - أَ) входит в слово, начинающееся с соединительной хамзы (هَمْزَةُ الْوَصْلِ - ٱ) определённого артикля (الْ).</li>
-
-<li>Трансформация (аспект "Бадаль"): هَمْزَةُ الْوَصْلِ (ٱ) заменяется (إِبْدَالٌ) на маддовый Алиф (الْأَلِفُ الْمَدِّيَّةُ).</li>
+                                    <li>Трансформация (аспект "Бадаль"): هَمْزَةُ الْوَصْلِ (ٱ) заменяется (إِبْدَالٌ) на маддовый Алиф (الْأَلِفُ الْمَدِّيَّةُ).</li>
                                     <li>Причина удлинения на 6 счётов: Этот заменённый Алиф оказывается перед буквой с постоянным сукуном (سُكُونٌ لَازِمٌ), что делает это удлинение الْمَدُّ اللَّازِمُ.</li>
                                     <li>Примеры в риваяте Хафса:</li>
                                     <ul>
@@ -379,8 +578,7 @@
                                <li>Важное примечание: Если в чтении встречаются Мадд 'Арид и Мадд Лин, то чтец должен соблюдать равенство между ними или делать Мадд Лин короче. Недопустимо обратное, так как Мадд 'Арид сильнее Мадд Лин.</li>
                                 <li>Длина: Допустимое (جَائِزٌ) 2, 4 или 6 счетов.</li>
                                 <li>Пример: При остановке на خَوْفٌ (становится خَوْفْ), الْبَيْتَ (становится الْبَيْتْ).</li>
-
-</ul>
+                            </ul>
                         </li>
                         <li>
                             <strong>الْمَدُّ اللَّازِمُ (Аль-Мадд аль-Лязим) – Необходимое/Обязательное удлинение: Когда за маддовой буквой следует постоянный (не временный из-за остановки) сукун. (Случаи الْمَدُّ الْفَرْقُ являются его частным проявлением).</strong>
@@ -414,8 +612,7 @@
                                 <li>الْمَدُّ الصِّلَةُ الصُّغْرَى (Аль-Мадд ас-Силя ас-Сугра) – Малое соединительное удлинение: Если هَاءٌ (ـهِ / ـهُ) огласована (кясрой или даммой), ей предшествует огласованная буква, а за ней следует огласованная буква (не هَمْزَةٌ), она удлиняется на 2 счета, как الْمَدُّ الطَّبِيعِيُّ.</li>
                                 <ul>
                                     <li>Пример: لَهُ مَا فِي السَّمَاوَاتِ.</li>
-
-</ul>
+                                </ul>
                                 <li>الْمَدُّ الصِّلَةُ الْكُبْرَى (Аль-Мадд ас-Силя аль-Кубра) – Большое соединительное удлинение: Если هَاءٌ (ـهِ / ـهُ) огласована, ей предшествует огласованная буква, а за ней следует هَمْزَةُ الْقَطْعِ (ء), она удлиняется как الْمَدُّ الْمُنْفَصِلُ (4 или 5 счетов у Хафса по пути Аш-Шатыбийи).</li>
                                 <ul>
                                     <li>Пример: مَالُهُ أَخْلَدَهُ.</li>
@@ -458,8 +655,7 @@
                     <li>Следующая: Когда они с даммой (ضَمَّةٌ) (например, يَقُولُ, غُلِبَتْ).</li>
                     <li>Следующая: Когда они с кясрой (كَسْرَةٌ) (например, قِيلَ, ظِلَالٍ). (Здесь التَّفْخِيمُ самый слабый, но все еще присутствует. Для خَاءٌ, غَيْنٌ и قَافٌ с кясрой некоторые ученые описывают это как "التَّفْخِيمُ النِّسْبِيُّ" - относительная твердость).</li>
                     <li>Когда с сукуном: التَّفْخِيمُ зависит от огласовки предыдущей буквы (следуя порядку выше).</li>
-
-</ul>
+                </ul>
             </ul>
         </li>
         <li>
@@ -619,8 +815,7 @@
                 <li>Когда هَمْزَةُ الْوَصْلِ предшествует вопросительная هَمْزَةُ الْقَطْعِ (أَ), هَمْزَةُ الْوَصْلِ часто опускается или изменяется (как в случаях الْمَدُّ الْفَرْقُ, рассмотренных выше).</li>
                 <ul>
                     <li>Если за هَمْزَةُ الْوَصْلِ следует لَامٌ سَاكِنَةٌ (как в ال), и ей предшествует вопросительная هَمْزَةُ, هَمْزَةُ الْوَصْلِ становится الْمَدُّ الْأَلِفُ в 6 счетов (الْمَدُّ الْفَرْقِ). Пример: آلذَّكَرَيْنِ.</li>
-
-<li>В других случаях هَمْزَةُ الْوَصْلِ опускается. Пример: أَ + اسْتَغْفَرْتَ لَهُمْ становится أَسْتَغْفَرْتَ لَهُمْ.</li>
+                    <li>В других случаях هَمْزَةُ الْوَصْلِ опускается. Пример: أَ + اسْتَغْفَرْتَ لَهُمْ становится أَسْتَغْفَرْتَ لَهُمْ.</li>
                 </ul>
             </ul>
         </li>
@@ -661,8 +856,7 @@
                     <li>تَاءٌ مَرْبُوطَةٌ (ة) всегда заменяется на هَاءٌ سَاكِنَةٌ (هْ). Пример: رَحْمَةً или رَحْمَةٌ или رَحْمَةٍ становится رَحْمَهْ.</li>
                 </ul>
                 <li>Если слово заканчивается на маддовую букву, она остается без изменений. Пример: قَالَا, يَدْعُو, فِي.</li>
-
-</ul>
+            </ul>
         </li>
         <li>
             <strong>السَّكْتُ (Ас-Сакт) – Пауза без дыхания (Хафс ан 'Асым по пути Аш-Шатыбийи - طَرِيقُ الشَّاطِبِيَّةِ)</strong>
@@ -708,9 +902,7 @@
         <li>
             <strong>Слова с необычным написанием или произношением:</strong>
             <ul>
-                <li>الصِّرَاطَ / السِّرَاطَ: В Коране слово "путь" встречается в написании с буквой صَادٌ (الصِّرَاطَ) и иногда над этой صَادٌ может быть маленькая سِينٌ (или наоборот, سِينٌ с маленькой صَادٌ над ней), указывая на варианты чтения в разных кыраатах. Хафс ан 'Асым читает это слово преимущественно с صَادٌ. Однако, слово الْمُصَيْطِرُونَ в Суре Ат-Тур (52), аят 37, пишется с صَادٌ, но для Хафса допустимо чтение как с صَادٌ (الْمُصَيْطِرُونَ), так и с سِينٌ (الْمُسَيْطِرُونَ). Чтение с صَادٌ является основным.
-
-В слове بَصْطَةً в Суре Аль-А'раф (7), аят 69 (فِي الْخَلْقِ بَصْطَةً), Хафс читает с صَادٌ (несмотря на то, что в некоторых мусхафах над ней может быть маленькая س).</li>
+                <li>الصِّرَاطَ / السِّرَاطَ: В Коране слово "путь" встречается в написании с буквой صَادٌ (الصِّرَاطَ) и иногда над этой صَادٌ может быть маленькая سِينٌ (или наоборот, سِينٌ с маленькой صَادٌ над ней), указывая на варианты чтения в разных кыраатах. Хафс ан 'Асым читает это слово преимущественно с صَادٌ. Однако, слово الْمُصَيْطِرُونَ в Суре Ат-Тур (52), аят 37, пишется с صَادٌ, но для Хафса допустимо чтение как с صَادٌ (الْمُصَيْطِرُونَ), так и с سِينٌ (الْمُسَيْطِرُونَ). Чтение с صَادٌ является основным. В слове بَصْطَةً в Суре Аль-А'раф (7), аят 69 (فِي الْخَلْقِ بَصْطَةً), Хафс читает с صَادٌ (несмотря на то, что в некоторых мусхафах над ней может быть маленькая س).</li>
                 <li>Различие между ض и ظ: Правильное место образования для ضَادٌ (ض) и ظَاءٌ (ظ) крайне важно.</li>
                 <li>سَلَاسِلَاْ (в Суре Аль-Инсан (76), аят 4):</li>
                 <ul>
@@ -736,24 +928,151 @@
                     <li>При остановке: Два допустимых способа для Хафса – либо с сохранением Йа с сукуном (آتَانِيْ), либо с опусканием Йа и сукуном на Нун (آتَانْ). Сохранение Йа (آتَانِيْ) является более распространённым.</li>
                     <li>При продолжении: Читается с фатхой на Йа (آتَانِيَ).</li>
                 </ul>
-                <li>"Нун Кутни" (النُّونُ الْقُطْنِيُّ): Это маленькая Нун с кясрой (нِ), которая добавляется при чтении для соединения слова, заканчивающегося на танвин, со следующим словом, начинающимся с Хамзат аль-Васль, чтобы избежать встречи двух сукунов. Например, если слово خَيْرًا за которым следует الْوَصِيَّةُ, то при соединении читается как خَيْرَنِ الْوَصِيَّةُ. Это не уникально для Хафса, а является общим правилом соединения в таких случаях.</li>
+                <li>"Нун Кутни" (النُّونُ الْقُطْنِيُّ): Это маленькая Нун с кясрой (نِ), которая добавляется при чтении для соединения слова, заканчивающегося на танвин, со следующим словом, начинающимся с Хамзат аль-Васль, чтобы избежать встречи двух сукунов. Например, если слово خَيْرًا за которым следует الْوَصِيَّةُ, то при соединении читается как خَيْرَنِ الْوَصِيَّةُ. Это не уникально для Хафса, а является общим правилом соединения в таких случаях.</li>
             </ul>
         </li>
     </ul>
     <p>Освоение таджвида в риваяте Хафса требует не только теоретических знаний, но и постоянной практики с квалифицированным учителем, который может исправить произношение и применение этих правил. Это подробное объяснение предоставляет всесторонний обзор, но ключевым моментом является практическое применение.</p>
 </div>
-<div class="zoom-controls">
-        <button class="zoom-btn" onclick="zoomOut()">-</button>
-        <span class="zoom-level" id="zoomLevel">100%</span>
-        <button class="zoom-btn" onclick="zoomIn()">+</button>
-    </div>
 </main>
 
+<footer class="page-footer">
+  <hr>
+  <p>Справочник по таджвиду · риваят Хафса ан 'Асыма</p>
+</footer>
 
+<div class="toolbar" id="toolbar" role="toolbar" aria-label="Управление чтением">
+  <button class="tb-btn" data-action="zoom-out" title="Уменьшить текст" aria-label="Уменьшить текст">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+  </button>
+  <button class="tb-btn tb-btn--reset" data-action="reset" title="Сбросить размер текста" aria-label="Сбросить размер текста">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><polyline points="21 3 21 9 15 9"/></svg>
+  </button>
+  <button class="tb-btn" data-action="zoom-in" title="Увеличить текст" aria-label="Увеличить текст">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+  </button>
+  <span class="tb-sep"></span>
+  <button class="tb-btn" data-action="theme" title="Светлая / тёмная тема" aria-label="Переключить тему">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 3a9 9 0 0 0 0 18z" fill="currentColor"/></svg>
+  </button>
+</div>
 
+<script>
+(function () {
+  "use strict";
+  var root = document.documentElement;
+  var toolbar = document.getElementById("toolbar");
+  var progress = document.getElementById("scrollProgress");
+  var btn = function (a) { return toolbar.querySelector('[data-action="' + a + '"]'); };
 
-<script src="js/script.js">
-    
+  /* ---------- Масштаб текста ---------- */
+  var MIN = 0.5, MAX = 1.8, STEP = 0.1, DEFAULT = 1, scale = DEFAULT;
+  function clamp(v) { return Math.min(MAX, Math.max(MIN, Math.round(v * 100) / 100)); }
+  function applyScale() { root.style.setProperty("--scale", scale.toFixed(2)); }
+  btn("zoom-in").addEventListener("click", function () { scale = clamp(scale + STEP); applyScale(); });
+  btn("zoom-out").addEventListener("click", function () { scale = clamp(scale - STEP); applyScale(); });
+
+  /* ---------- Тема ---------- */
+  var mq = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)");
+  var theme = mq && mq.matches ? "dark" : "light";
+  function applyTheme() { root.setAttribute("data-theme", theme); }
+  applyTheme();
+  btn("theme").addEventListener("click", function () {
+    theme = theme === "dark" ? "light" : "dark";
+    applyTheme();
+  });
+
+  /* ---------- Сброс: только размер текста + анимация (позицию панели не трогаем) ---------- */
+  var reset = btn("reset");
+  reset.addEventListener("click", function () {
+    scale = DEFAULT; applyScale();
+    reset.classList.remove("spin");
+    void reset.offsetWidth;   /* reflow, чтобы анимация перезапустилась */
+    reset.classList.add("spin");
+  });
+
+  /* ---------- Полупрозрачность в покое ---------- */
+  var idleTimer;
+  function wake(delay) {
+    toolbar.classList.add("is-active");
+    clearTimeout(idleTimer);
+    idleTimer = setTimeout(function () {
+      if (!toolbar.classList.contains("is-dragging")) toolbar.classList.remove("is-active");
+    }, delay || 2200);
+  }
+  ["pointerenter", "pointerdown", "pointermove"].forEach(function (ev) {
+    toolbar.addEventListener(ev, function () { wake(); });
+  });
+  toolbar.addEventListener("pointerleave", function () { wake(600); });
+
+  /* ---------- Перетаскивание за ЛЮБУЮ точку панели (мышь + палец) ---------- */
+  /* Клики по кнопкам сохраняются: тащим, только если палец/курсор сдвинулся за порог. */
+  var THRESHOLD = 4;            // px
+  var down = null;              // нажатие (ещё не обязательно перетаскивание)
+  var dragging = false;
+  var suppressClick = false;    // подавить клик, если это было перетаскивание
+
+  function clampPx(v, lo, hi) { return Math.min(hi, Math.max(lo, v)); }
+
+  toolbar.addEventListener("pointerdown", function (e) {
+    if (e.button > 0) return;                 // только основная кнопка / касание
+    suppressClick = false;
+    dragging = false;
+    down = { id: e.pointerId, x: e.clientX, y: e.clientY, rect: toolbar.getBoundingClientRect() };
+  });
+
+  toolbar.addEventListener("pointermove", function (e) {
+    if (!down || e.pointerId !== down.id) return;
+    var dx = e.clientX - down.x, dy = e.clientY - down.y;
+    if (!dragging) {
+      if (Math.abs(dx) + Math.abs(dy) < THRESHOLD) return;   // ещё считается кликом
+      dragging = true;
+      toolbar.classList.add("is-dragging");
+      try { toolbar.setPointerCapture(down.id); } catch (_) {}
+    }
+    e.preventDefault();
+    var pad = 8, w = toolbar.offsetWidth, h = toolbar.offsetHeight;
+    toolbar.style.left   = clampPx(down.rect.left + dx, pad, window.innerWidth  - w - pad) + "px";
+    toolbar.style.top    = clampPx(down.rect.top  + dy, pad, window.innerHeight - h - pad) + "px";
+    toolbar.style.right  = "auto";
+    toolbar.style.bottom = "auto";
+  });
+
+  function endDrag(e) {
+    if (!down || (e && e.pointerId !== down.id)) return;
+    if (dragging) {
+      suppressClick = true;                   // это было перетаскивание, не клик
+      try { toolbar.releasePointerCapture(down.id); } catch (_) {}
+      toolbar.classList.remove("is-dragging");
+      wake(900);
+    }
+    down = null;
+    dragging = false;
+  }
+  toolbar.addEventListener("pointerup", endDrag);
+  toolbar.addEventListener("pointercancel", endDrag);
+
+  // Если только что было перетаскивание — не пропускать клик к кнопке
+  toolbar.addEventListener("click", function (e) {
+    if (suppressClick) { suppressClick = false; e.preventDefault(); e.stopPropagation(); }
+  }, true);
+  window.addEventListener("resize", function () {
+    if (!toolbar.style.left) return;
+    var pad = 8, w = toolbar.offsetWidth, h = toolbar.offsetHeight;
+    toolbar.style.left = clampPx(parseFloat(toolbar.style.left), pad, window.innerWidth - w - pad) + "px";
+    toolbar.style.top  = clampPx(parseFloat(toolbar.style.top),  pad, window.innerHeight - h - pad) + "px";
+  });
+
+  /* ---------- Индикатор прокрутки ---------- */
+  function onScroll() {
+    var max = root.scrollHeight - root.clientHeight;
+    progress.style.width = (max > 0 ? (root.scrollTop / max) * 100 : 0) + "%";
+  }
+  document.addEventListener("scroll", onScroll, { passive: true });
+
+  applyScale();
+  onScroll();
+})();
 </script>
 
 </body>
