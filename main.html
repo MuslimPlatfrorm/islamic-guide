@@ -10,15 +10,15 @@
 <style>
   /* ─────────── Токены ─────────── */
   :root{
-    --accent:#10b981;        /* изумруд — используется дозированно */
-    --accent-d:#0a7d57;      /* тёмный изумруд (текст на светлом) */
-    --accent-l:#6ee7b7;      /* светлый изумруд */
+    --accent:#10b981;
+    --accent-d:#0a7d57;
+    --accent-l:#6ee7b7;
     --accent-glow:rgba(16,185,129,.12);
 
-    --bg:#faf7f1;            /* мягкий тёплый светлый */
-    --surface:#ffffff;       /* шапка/карточки */
-    --fill:#f2efe8;          /* лёгкая заливка */
-    --border:#e6e1d6;        /* тонкая линия */
+    --bg:#faf7f1;
+    --surface:#ffffff;
+    --fill:#f2efe8;
+    --border:#e6e1d6;
 
     --text:#1b1a17;
     --text2:#4a4742;
@@ -34,12 +34,12 @@
     --accent-l:#34d399;
     --accent-glow:rgba(52,211,153,.10);
 
-    --bg:#0b0b0c;           /* почти чёрный */
-    --surface:#141416;       /* поверхность чуть приподнята */
+    --bg:#0b0b0c;
+    --surface:#141416;
     --fill:#19191c;
-    --border:#262629;        /* тёмная, тонкая, но заметная линия */
+    --border:#262629;
 
-    --text:#eae8e3;          /* мягкий не-белый */
+    --text:#eae8e3;
     --text2:#b6b4ae;
     --text3:#7c7a74;
 
@@ -49,7 +49,6 @@
 
   *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
   html{-webkit-text-size-adjust:100%;-webkit-tap-highlight-color:transparent}
-  /* убираем синюю подсветку при тапе на ссылки/кнопки (стандартное поведение мобильных браузеров) */
   a,button{-webkit-tap-highlight-color:transparent}
   ::selection{background:rgba(16,185,129,.18)}
   html.dark ::selection{background:rgba(52,211,153,.22)}
@@ -65,7 +64,7 @@
   html.dark ::-webkit-scrollbar-thumb{background:#2f2f33}
   .ar{font-family:'Amiri',serif;direction:rtl}
 
-  /* ─────────── Переключатель темы (маленький, в углу) ─────────── */
+  /* ─────────── Переключатель темы ─────────── */
   .theme-fab{
     position:fixed;top:.85rem;right:.85rem;z-index:50;
     width:38px;height:38px;border-radius:10px;cursor:pointer;
@@ -78,7 +77,7 @@
   .theme-fab:active{transform:scale(.96);transition-duration:.08s}
   .theme-fab:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 
-  /* ─────────── Шапка (полная ширина) ─────────── */
+  /* ─────────── Шапка ─────────── */
   .head{
     position:relative;overflow:hidden;text-align:center;
     background:var(--surface);border-bottom:1px solid var(--border);
@@ -113,7 +112,7 @@
   .grid{display:grid;grid-template-columns:1fr;gap:.85rem}
   @media(min-width:620px){
     .grid{grid-template-columns:1fr 1fr;gap:1rem}
-    /* если последняя карточка осталась одна в ряду (нечётное число) — центрируем её */
+    /* одиночная последняя карточка (нечётное число) — по центру */
     .grid>.card:last-child:nth-child(odd){grid-column:1 / -1;justify-self:center;width:calc(50% - .5rem)}
   }
 
@@ -125,14 +124,16 @@
     transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease;
     opacity:0;transform:translateY(12px);animation:rise .45s ease forwards;
   }
-  .card:nth-child(2){animation-delay:.05s}
-  .card:nth-child(3){animation-delay:.10s}
-  .card:nth-child(4){animation-delay:.15s}
-  .card:nth-child(5){animation-delay:.20s}
-  .card:nth-child(6){animation-delay:.25s}
+  .card:nth-child(2){animation-delay:.04s}
+  .card:nth-child(3){animation-delay:.08s}
+  .card:nth-child(4){animation-delay:.12s}
+  .card:nth-child(5){animation-delay:.16s}
+  .card:nth-child(6){animation-delay:.20s}
+  .card:nth-child(7){animation-delay:.24s}
+  .card:nth-child(8){animation-delay:.28s}
   @keyframes rise{to{opacity:1;transform:translateY(0)}}
 
-  .card::before{ /* тонкая изумрудная грань слева — только на hover */
+  .card::before{
     content:'';position:absolute;left:0;top:0;bottom:0;width:3px;
     background:var(--accent);opacity:0;transition:opacity .2s ease;
   }
@@ -142,9 +143,15 @@
   }
   .card:hover::before,.card:focus-visible::before{opacity:.9}
   .card:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
-  /* мягкая отдача при нажатии (в стиле темы, без синей заливки) */
   .card:active{transform:translateY(-1px) scale(.992);background:var(--fill);border-color:var(--accent);transition-duration:.08s}
   .card:active::before{opacity:.9}
+
+  /* номер шага */
+  .card-num{
+    position:absolute;top:.7rem;left:.8rem;
+    font-family:'Playfair Display',serif;font-size:.8rem;font-weight:700;
+    color:var(--accent-d);opacity:.55;
+  }
 
   .card-ar{
     font-family:'Amiri',serif;direction:rtl;color:var(--accent-d);
@@ -190,35 +197,56 @@
     <div class="label">Разделы</div>
     <div class="grid">
 
-      <a class="card" href="https://muslimplatfrorm.github.io/ArabicGrammar/">
-        <div class="card-ar">النَّحْو والصَّرْف</div>
-        <div class="card-title">Арабская грамматика</div>
-        <p class="card-desc">Основы наху и сарфа: разбор слов, и‘раб и построение предложений.</p>
+      <a class="card" href="https://muslimplatfrorm.github.io/tajvid/">
+        <span class="card-num">01</span>
+        <div class="card-ar">التَّجْوِيد</div>
+        <div class="card-title">Предтаджвид + Таджвид</div>
+        <p class="card-desc">Подготовительный курс и сам таджвид (сокращённо), объединены в одном.</p>
         <span class="card-go">Открыть <span class="arrow">→</span></span>
       </a>
 
-      <a class="card" href="https://muslimplatfrorm.github.io/Tadjvid/">
+      <a class="card" href="https://muslimplatfrorm.github.io/tajvid/tajvid.html">
+        <span class="card-num">02</span>
         <div class="card-ar">التَّجْوِيد</div>
-        <div class="card-title">Таджвид</div>
-        <p class="card-desc">Правила чтения Корана: махрадж букв, правила нуна и мима, мадд.</p>
+        <div class="card-title">Таджвид (полный)</div>
+        <p class="card-desc">Полная несокращённая версия учебника таджвида.</p>
+        <span class="card-go">Открыть <span class="arrow">→</span></span>
+      </a>
+
+      <a class="card" href="https://muslimplatfrorm.github.io/islamic-guide/pages/Sifatul%20Huruf/Sifat-ul-Huruf.html">
+        <span class="card-num">03</span>
+        <div class="card-ar">صِفَات الحُرُوف</div>
+        <div class="card-title">Сифатуль хуруф — таблица</div>
+        <p class="card-desc">Интерактивная таблица: хамс, джахр, шидда и др. для каждой буквы с харакатами.</p>
+        <span class="card-go">Открыть <span class="arrow">→</span></span>
+      </a>
+
+      <a class="card" href="https://muslimplatfrorm.github.io/Sifatul-Huruf/">
+        <span class="card-num">04</span>
+        <div class="card-ar">صِفَات الحُرُوف</div>
+        <div class="card-title">Сифатуль хуруф</div>
+        <p class="card-desc">Отдельный сайт: интерактивная сетка свойств арабских букв.</p>
         <span class="card-go">Открыть <span class="arrow">→</span></span>
       </a>
 
       <a class="card" href="https://muslimplatfrorm.github.io/islamic-guide/pages/letters/letters.html">
+        <span class="card-num">05</span>
         <div class="card-ar">صِفَاتُ الحُرُوف</div>
         <div class="card-title">Характеристики букв</div>
         <p class="card-desc">Теория сыфатов: какие неотъемлемые качества есть у букв и как они делятся на группы.</p>
         <span class="card-go">Открыть <span class="arrow">→</span></span>
       </a>
 
-      <a class="card" href="https://muslimplatfrorm.github.io/islamic-guide/pages/Sifatul%20Huruf/Sifat-ul-Huruf.html">
-        <div class="card-ar">صِفَات الحُرُوف</div>
-        <div class="card-title">Сифатуль хуруф</div>
-        <p class="card-desc">Интерактивная таблица: хамс, джахр, шидда и др. для каждой буквы с харакатами.</p>
+      <a class="card" href="https://muslimplatfrorm.github.io/ArabicGrammar/">
+        <span class="card-num">06</span>
+        <div class="card-ar">النَّحْو والصَّرْف</div>
+        <div class="card-title">Арабская грамматика</div>
+        <p class="card-desc">Основы наху и сарфа: разбор слов, и‘раб и построение предложений.</p>
         <span class="card-go">Открыть <span class="arrow">→</span></span>
       </a>
 
       <a class="card" href="https://muslimplatfrorm.github.io/Namaz/namaz.html">
+        <span class="card-num">07</span>
         <div class="card-ar">الصَّلَاة</div>
         <div class="card-title">Намаз</div>
         <p class="card-desc">Пошаговая анимация намаза: положения тела и правильный порядок молитвы.</p>
@@ -226,6 +254,7 @@
       </a>
 
       <a class="card" href="https://muslimplatfrorm.github.io/islamic-guide/pages/sudjud%20as-sahf/sudjud%20as-sahf.html">
+        <span class="card-num">08</span>
         <div class="card-ar">سُجُود السَّهْو</div>
         <div class="card-title">Суджуд ас-сахв</div>
         <p class="card-desc">Земной поклон невнимательности: когда и как он совершается в намазе.</p>
